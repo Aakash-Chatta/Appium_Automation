@@ -160,6 +160,7 @@ public class Nordea_App extends common_class {
 		Thread.sleep(10000);
 		System.out.println("Username entered successfully !");
 
+		
 	}
 
 }
