@@ -72,7 +72,6 @@ catch( Exception e) {
 
      System.out.println("Swipe method executed sucessfully!");
        AppEntry(driver);
-       Own_Transfer(driver);
        driver.quit();
       // driver.resetApp();
 		}
@@ -182,100 +181,10 @@ driver.findElementByXPath("//android.widget.Button[@text='Log in with Nordea ID 
 Thread.sleep(10000);
 System.out.println("Username entered successfully !");
 
-/*Alert alert = driver.switchTo().alert();
-alert.dismiss();*/
-
-
-//driver.findElementByXPath("//android.widget.TextView[@text='Autofill code']").click();
-//driver.findElementByXPath("//android.widget.Button[@text='CANCEL']").click();
-Thread.sleep(3000);
-driver.findElementById("fi.nordea.sme.beta:id/input_editfield").sendKeys("000000000");
-driver.hideKeyboard();
-
- 
-//driver.findElementByXPath("//android.widget.Button[@text='Never']").click(); 
-
-
-
-/*Actions act= new Actions(driver);
-WebElement response_code= driver.findElementById("fi.nordea.sme.beta:id/textinput_placeholder");
-act.doubleClick(response_code).perform();*/
-
-/*Using javascriptExecutor to forcefully enter value in Response code field
-WebElement response_code= driver.findElementById("fi.nordea.sme.beta:id/textinput_placeholder");
-JavascriptExecutor js = (JavascriptExecutor) driver;
-js.executeScript("arguments[0].value=arguments[1]",response_code,"000000000");*/
-
-
-//driver.findElementById("fi.nordea.sme.beta:id/ncc_button").click();
-driver.findElementByXPath("//android.widget.Button[@text='OK']").click();
-System.out.println("Response Code Enetered successfully !");
-
-Thread.sleep(3000);
-
-driver.findElementByXPath("//android.widget.Button[@text='Skip']").click();
-Thread.sleep(3000);
-
-driver.findElementByXPath("//android.widget.Button[@text='Skip']").click();
-Thread.sleep(15000);
-
-System.out.println("Login Successful");
-//check if overview page displayed
-
-String Overview_page_title = driver.findElementByXPath("//android.widget.TextView[@text='Overview']").getText();
-
-Assert.assertEquals(Overview_page_title,"Overview");
 		}
 		
-		
-public static void Own_Transfer(AndroidDriver<AndroidElement> driver) throws InterruptedException {
-MobileElement AccountLocator=driver.findElementByXPath("//android.widget.Button[contains(@text,'CORPQQQQQQQQQQQQQQQQQQQ')]");
-String Account=AccountLocator.getText();
-AccountLocator.click();
-MobileElement Balance_Locator=driver.findElementByXPath("//android.widget.TextView[contains(@text,'EUR')]");
-String Account_Balance=Balance_Locator.getText();
-String ammount = Account_Balance.replaceAll("[^0-9.]", "");
-Double BeforeTransactionBalance = Double.parseDouble(ammount);
+}
 
-
-System.out.println("Account Details: "+Account);
-System.out.println("Balance Before Transaction: "+Account_Balance);
-System.out.println(BeforeTransactionBalance);
-
-driver.findElementByXPath("//android.view.View[@text='Payments Payments']").click();
-MobileElement el11 = (MobileElement) driver.findElementByXPath("//android.view.View[@content-desc='Own transfer']/android.widget.TextView");
-el11.click();
-
-driver.findElementByXPath("//android.view.View[@text='Select Account']").click();
-
-driver.findElementByXPath("//android.widget.CheckedTextView[contains(@text,'SHEKKITILI')]").click();
-
-driver.findElementByXPath("//android.view.View[3]/android.view.View/android.view.View/android.widget.EditText").sendKeys("1.23");
-System.out.println("Transaction Amount= 1.23 ");
-Thread.sleep(1000);
-
-driver.findElementByXPath("//android.view.View[5]/android.view.View/android.view.View/android.widget.EditText").sendKeys("Automation Testing");
-
-driver.findElementByXPath("//android.widget.Button[@text='Transfer']").click();
-
-driver.findElementByXPath("//android.widget.TextView[@text='Overview']").click();
-Thread.sleep(3000);
-
-Account=AccountLocator.getText();
-driver.findElementByXPath("//android.widget.Button[contains(@text,'CORPQQQQQQQQQQQQQQQQQQQ')]").click();
-String AfterBalance=Balance_Locator.getText();
-String deduct = AfterBalance.replaceAll("[^0-9.]", "");
-Double AfterTransactionBalance = Double.parseDouble(deduct);
-
-System.out.println("Account Details: "+Account);
-System.out.println("Balance After Transaction: "+AfterBalance);
-System.out.println(AfterTransactionBalance);
-
-Assert.assertTrue(BeforeTransactionBalance>AfterTransactionBalance);
-
-	}
-			}
-				
 			
 			
 
