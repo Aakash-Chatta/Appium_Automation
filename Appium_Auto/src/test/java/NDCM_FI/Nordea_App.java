@@ -19,7 +19,7 @@ import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 
-public class Nordea_App extends common_class {
+public class Nordea_App extends common_class_ {
 
 	// public static AndroidDriver<AndroidElement> driver;
 
