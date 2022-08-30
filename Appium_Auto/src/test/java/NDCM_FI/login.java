@@ -9,6 +9,8 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.junit.Assert;
 
 import io.appium.java_client.MobileElement;
@@ -94,10 +96,12 @@ public class login extends common_class_ {
 	}
 
 	public static void AppEntry(AndroidDriver<AndroidElement> driver) throws InterruptedException {
+		WebDriverWait wait = new WebDriverWait(driver,12);
 		try {
 			// driver.findElementById("fi.nordea.sme.beta:id/ncc_button").click();
+			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//android.widget.Button[@text='Log in']")));
 			driver.findElementByXPath("//android.widget.Button[@text='Log in']").click();
-			Thread.sleep(8000);
+			//Thread.sleep(8000);
 
 			// Login to appcenter.ms
 			WebElement appcenterpage = driver.findElementByXPath("//android.view.View[@content-desc='Google']");
@@ -119,6 +123,7 @@ public class login extends common_class_ {
 			// e.printStackTrace();
 		}
 
+		Thread.sleep(4000);
 		try {
 			// checking if "continue to Nordea Mobile " page is displayed
 			WebElement NordeaMobilePage = driver.findElementById("fi.nordea.sme.beta:id/ncc_button");
@@ -135,81 +140,47 @@ public class login extends common_class_ {
 		} catch (NoSuchElementException e) {
 			// e.printStackTrace();
 		}
-
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//android.widget.Button[@text='Change method']")));
 		// Selecting login method as 'Code-Calculator'
 		driver.findElementByXPath("//android.widget.Button[@text='Change method']").click();
 
-		try {
-			// Again checking if navigating to appcenter.ms
-			WebElement appcenterpage = driver.findElementByXPath("//android.view.View[@content-desc='Google']");
-			Boolean appcenterdisplayed = appcenterpage.isDisplayed();
-			if (appcenterdisplayed) {
-
-				driver.findElementByXPath("//android.view.View[@content-desc='Google']").click();
-				driver.findElementByXPath(
-						"//android.view.View[@content-desc='Hemlata Shinde hemlatagorde26@gmail.com']").click();
-			}
-		}
-
-		catch (Exception e) {
-			// e.printStackTrace();
-		}
+		int user_id=402727;
 		System.out.println("Login Method is Code Calculator");
 		driver.findElementByXPath("//android.widget.Button[@text='Code calculator']").click();
 		driver.findElementById("fi.nordea.sme.beta:id/input_editfield").click();
-		System.out.println("User Id is 402727");
-		driver.findElementById("fi.nordea.sme.beta:id/input_editfield").sendKeys("402727");
+		System.out.println("User Id is "+user_id);
+		driver.findElementById("fi.nordea.sme.beta:id/input_editfield").sendKeys(Integer.toString(user_id));
 		driver.findElementByXPath("//android.widget.Button[@text='Login with Code calculator']").click();
 
-		System.out.println("Username entered successfully !");
-
-		/*
-		 * Alert alert = driver.switchTo().alert(); alert.dismiss();
-		 */
-
-		// driver.findElementByXPath("//android.widget.TextView[@text='Autofill
-		// code']").click();
-		// driver.findElementByXPath("//android.widget.Button[@text='CANCEL']").click();
-		Thread.sleep(3000);
+		wait.until(ExpectedConditions.visibilityOf(driver.findElementById("fi.nordea.sme.beta:id/input_editfield")));
+		System.out.println("Username Entered successfully !");
+		
 		System.out.println("Response Code is 000000000");
 		driver.findElementById("fi.nordea.sme.beta:id/input_editfield").sendKeys("000000000");
 		driver.hideKeyboard();
-
-		// driver.findElementByXPath("//android.widget.Button[@text='Never']").click();
-
-		/*
-		 * Actions act= new Actions(driver); WebElement response_code=
-		 * driver.findElementById("fi.nordea.sme.beta:id/textinput_placeholder")
-		 * ; act.doubleClick(response_code).perform();
-		 */
-
-		/*
-		 * Using javascriptExecutor to forcefully enter value in Response code
-		 * field WebElement response_code=
-		 * driver.findElementById("fi.nordea.sme.beta:id/textinput_placeholder")
-		 * ; JavascriptExecutor js = (JavascriptExecutor) driver;
-		 * js.executeScript("arguments[0].value=arguments[1]",response_code,
-		 * "000000000");
-		 */
-
-		// driver.findElementById("fi.nordea.sme.beta:id/ncc_button").click();
+		
 		driver.findElementByXPath("//android.widget.Button[@text='OK']").click();
-		System.out.println("Response Code Enetered successfully !");
+		System.out.println("Response Code Entered successfully ");
+		try {
+			wait.until(ExpectedConditions.visibilityOf(driver.findElementByXPath("//android.widget.Button[@text='Skip']")));
+			MobileElement skip=driver.findElementByXPath("//android.widget.Button[@text='Skip']");
+			skip.click();
+			wait.until(ExpectedConditions.visibilityOf(driver.findElementByXPath("//android.widget.Button[@text='Skip']")));
+			MobileElement skip1=driver.findElementByXPath("//android.widget.Button[@text='Skip']");
+			skip1.click();
+			wait.until(ExpectedConditions.visibilityOf(driver.findElementByXPath("//android.widget.TextView[@text='Overview']")));
+			System.out.println("Login Successful");
+			// check if overview page displayed
 
-		Thread.sleep(5000);
+			String Overview_page_title = driver.findElementByXPath("//android.widget.TextView[@text='Overview']").getText();
 
-		driver.findElementByXPath("//android.widget.Button[@text='Skip']").click();
-		Thread.sleep(3000);
-
-		driver.findElementByXPath("//android.widget.Button[@text='Skip']").click();
-		Thread.sleep(15000);
-
-		System.out.println("Login Successful");
-		// check if overview page displayed
-
-		String Overview_page_title = driver.findElementByXPath("//android.widget.TextView[@text='Overview']").getText();
-
-		Assert.assertEquals(Overview_page_title, "Overview");
+			Assert.assertEquals(Overview_page_title, "Overview");
+		} catch (NoSuchElementException e) {
+			System.out.println("Login Unsuccessful");
+			Thread.sleep(8000);
+			String error = driver.findElementByXPath("//android.widget.TextView[contains(@text,'Please try again.')]").getText();
+			System.out.println(error);
+		}
 	}
 
 	/*

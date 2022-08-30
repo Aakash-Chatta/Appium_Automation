@@ -25,6 +25,8 @@ public class common_class_ {
 	//Use below apk file when running on real device
 	File app = new File(appDir, "NDCMFI_4.2.0.634_beta.apk");
 	
+	dc.setCapability("isHeadless", true);
+	
 	//File app = new File(appDir, "NDCMFI_3.28.0.593_beta.apk");
 	dc.setCapability(MobileCapabilityType.DEVICE_NAME,"Android Device");
 	//dc.setCapability(MobileCapabilityType.DEVICE_NAME,"Pixel4_emulator");

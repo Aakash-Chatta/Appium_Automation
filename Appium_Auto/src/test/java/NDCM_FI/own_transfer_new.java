@@ -1,6 +1,7 @@
 package NDCM_FI;
 
 import java.net.MalformedURLException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -11,7 +12,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 
-public class own_transfer extends login {
+public class own_transfer_new extends login {
 
 	public static void main(String[] args) throws MalformedURLException, InterruptedException {
 
@@ -23,7 +24,7 @@ public class own_transfer extends login {
 		WebElement panel1, panel2;
 		panel1 = driver.findElement(By.id("fi.nordea.sme.beta:id/whats_new_container"));
 		panel2 = driver.findElement(By.id("fi.nordea.sme.beta:id/navigation_content_frame"));
-
+		
 		login.SwipeScreen(panel1, driver);
 		login.SwipeScreen(panel1, driver);
 		login.SwipeScreen(panel2, driver);
@@ -32,23 +33,30 @@ public class own_transfer extends login {
 	}
 
 	public static void Payment_Own_Transfer(AndroidDriver<AndroidElement> driver) throws InterruptedException {
+		Double BalanceBeforeTransaction = null;
 		// Selecting and navgaing to The Account
 		MobileElement AccountLocator = driver
 				.findElementByXPath("//android.widget.Button[contains(@text,'CORPQQQQQQQQQQQQQQQQQQQ')]");
-		String Account = AccountLocator.getText();
 		AccountLocator.click();
+		Thread.sleep(3000);
 		// Checking and Printing the Balance of the account
-		MobileElement Balance_Locator = driver.findElementByXPath("//android.widget.TextView[contains(@text,'EUR')]");
-		String Account_Balance = Balance_Locator.getText();
-
+		driver.findElementByXPath("//android.view.View[contains(@text,'CORPQQQQQQQQQQQQQQQQQQQ')]").click();
+		List<AndroidElement> Account_List= driver.findElements(By.xpath("//*[@resource-id='android:id/custom']/android.widget.ListView/android.widget.CheckedTextView"));
+		 for (WebElement Account : Account_List){
+			 Account.getText(); 
+			 Account.click();
+		String Account_Balance=driver.findElement(By.xpath("//android.widget.TextView[contains(@text,'EUR')]")).getText();
 		// Converting The String to integer
 		String ammount = Account_Balance.replaceAll("[^0-9.]", "");
-		Double BeforeTransactionBalance = Double.parseDouble(ammount);
-
+		BalanceBeforeTransaction = Double.parseDouble(ammount);
+		if(BalanceBeforeTransaction>1){
+			break;	
+			}
 		System.out.println("Account Details: " + Account);
 		System.out.println("Balance Before Transaction: " + Account_Balance);
-		System.out.println(BeforeTransactionBalance);
-
+		System.out.println(BalanceBeforeTransaction);
+		}
+		
 		// Navigating to Payments option
 		driver.findElementByXPath("//android.view.View[@text='Payments Payments']").click();
 		MobileElement el11 = (MobileElement) driver
@@ -60,18 +68,9 @@ public class own_transfer extends login {
 		// Filling Own Transger Details
 
 		// Selecting To Account
-		//driver.findElementByXPath("//android.view.View[@text='Select Account']").click();
-		//driver.findElementByXPath("//android.widget.CheckedTextView[contains(@text,'SHEKKITILI')]").click();
-		// If both accounts are same
 		driver.findElementByXPath("//android.view.View[@text='Select Account']").click();
-		driver.findElementByXPath("//android.widget.CheckedTextView[contains(@text,'CORPQQQQQQQQQQQQQQQQQQQ')]").click();
-		MobileElement error = driver.findElementByXPath("//android.widget.TextView[@text='From account and To account cannot be the same account.']");
-		boolean a = true;
-		if (error.isDisplayed()) {
-			System.out.println("From account and To account cannot be the same account.");
-			a = false;
-		}
-		Assert.assertTrue("From account and To account cannot be the same account.", a);
+		driver.findElementByXPath("//android.widget.CheckedTextView[contains(@text,'SHEKKITILI')]").click();
+
 		// Enter the Transaction Ammount
 		driver.findElementByXPath("//android.view.View[3]/android.view.View/android.view.View/android.widget.EditText")
 				.sendKeys("1.23");
@@ -103,7 +102,7 @@ public class own_transfer extends login {
 		System.out.println("Balance After Transaction: " + AfterBalance);
 		System.out.println(AfterTransactionBalance);
 
-		Assert.assertTrue(BeforeTransactionBalance > AfterTransactionBalance);
+		//Assert.assertTrue(BalanceBeforeTransaction > AfterTransactionBalance);
 
 	}
 }

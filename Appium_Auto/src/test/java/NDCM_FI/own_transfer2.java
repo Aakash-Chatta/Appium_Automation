@@ -1,5 +1,8 @@
 package NDCM_FI;
 
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+
 import java.net.MalformedURLException;
 import java.util.concurrent.TimeUnit;
 
@@ -11,10 +14,24 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 
-public class own_transfer extends login {
+public class own_transfer2 extends login {
 
 	public static void main(String[] args) throws MalformedURLException, InterruptedException {
-
+		
+		RestAssured.baseURI="https://reqres.in/";
+		  //create a response to get user datalis
+		  Response response=RestAssured.given().get("/api/users?page=2");
+		  System.out.println(response.asString());
+		  
+		  //validate response details
+		  Assert.assertTrue(response.asString().contains("michael"));
+		  
+		/*
+		RestAssured.baseURI="https://buisness-rel01.nd.test.nordea.fi/";
+		Response response=RestAssured.given().get("/login");
+		System.out.println(response.asString());
+		 Assert.assertEquals(200,response.getStatusCode());
+*/
 		AndroidDriver<AndroidElement> driver = capabilities();
 
 		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
@@ -60,18 +77,19 @@ public class own_transfer extends login {
 		// Filling Own Transger Details
 
 		// Selecting To Account
-		//driver.findElementByXPath("//android.view.View[@text='Select Account']").click();
-		//driver.findElementByXPath("//android.widget.CheckedTextView[contains(@text,'SHEKKITILI')]").click();
-		// If both accounts are same
 		driver.findElementByXPath("//android.view.View[@text='Select Account']").click();
-		driver.findElementByXPath("//android.widget.CheckedTextView[contains(@text,'CORPQQQQQQQQQQQQQQQQQQQ')]").click();
-		MobileElement error = driver.findElementByXPath("//android.widget.TextView[@text='From account and To account cannot be the same account.']");
+		driver.findElementByXPath("//android.widget.CheckedTextView[contains(@text,'SHEKKITILI')]").click();
+/*
+		// If both accounts are same
+		MobileElement error = driver.findElementByXPath(
+				"//android.widget.TextView[@text='From account and To account cannot be the same account.']");
 		boolean a = true;
 		if (error.isDisplayed()) {
 			System.out.println("From account and To account cannot be the same account.");
 			a = false;
 		}
 		Assert.assertTrue("From account and To account cannot be the same account.", a);
+*/
 		// Enter the Transaction Ammount
 		driver.findElementByXPath("//android.view.View[3]/android.view.View/android.view.View/android.widget.EditText")
 				.sendKeys("1.23");
